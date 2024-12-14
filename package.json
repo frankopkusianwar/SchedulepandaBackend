@@ -1,25 +1,30 @@
 {
-  "name": "SchedulepandaBackend",
+  "name": "shcedulepandabackend",
   "version": "1.0.0",
-  "main": "dist/index.js",
+  "main": "./dist/src/server.js",
   "license": "MIT",
   "scripts": {
-    "build": "npx tsc",
-    "start": "node dist/index.js",
-    "dev": "nodemon src/index.ts"
+    "build": "rimraf ./dist  && npx tsc",
+    "prestart": "npm run build",
+    "start": "node ./dist/src/server.js",
+    "dev": "nodemon ./src/server.ts"
   },
   "dependencies": {
     "@apollo/server": "^4.11.2",
     "@graphql-tools/load-files": "^7.0.0",
+    "@graphql-tools/merge": "^9.0.12",
     "@graphql-tools/schema": "^10.0.9",
     "@prisma/client": "^5.22.0",
     "apollo-server-express": "^3.13.0",
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "express-graphql": "^0.12.0",
     "graphql": "^16.9.0",
     "graphql-tag": "^2.12.6",
-    "prisma": "^5.22.0"
+    "prisma": "^5.22.0",
+    "rimraf": "^6.0.1"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
