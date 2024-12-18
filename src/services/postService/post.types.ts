@@ -5,24 +5,48 @@ export const postDefs = /* GraphQL */ `
 
   type Post {
     id:                 String!
-    description:        String!
+    text:               String!
     date:               DateTime!
     time:               DateTime!
-    platform:           String!
-    postingSchedule:    String!
     hashTags:           String!
     createdAt:          DateTime! 
     updatedAt:          DateTime! 
-    userId:             String! 
+    clerkId:             String! 
   }
 
   type Query {
-    posts: [Post!]!
-    post(id: String!): Post
+    getPostedPosts(clerkID:ID!): [Post!]!
+    getScheduledPosts(clerkID:ID!): [Post!]!
+    getDraftPosts(clerkID:ID!): [Post!]!
+    
   }
 
   type Mutation {
-    createPost(description: String!, date: DateTime!, time: DateTime!, platform: String!, postingSchedule: String!, hashTags: String!, userId: String!): Post!
-    updatePost(id: String!, description: String!, date: DateTime!, time: DateTime!, platform: String!, postingSchedule: String!, hashTags: String!, userId: String!): Post!
+    draftPost(
+      text: String!,
+      date: DateTime, 
+      time: DateTime,  
+      hashTags: String!, 
+      clerkID:ID!
+      ): Post!
+
+      postNow(
+      text: String!,
+      date: DateTime, 
+      time: DateTime,  
+      hashTags: String!, 
+      clerkID:ID!
+      ): Post!
+
+
+      schedulePost(
+      text: String!,
+      date: DateTime!, 
+      time: DateTime!,  
+      hashTags: String!, 
+      clerkID:ID!
+      ): Post!
+
+       updatePost(id: String!, description: String!, date: DateTime!, time: DateTime!, platform: String!, postingSchedule: String!, hashTags: String!, clerkID: String!): Post!
   }
 `;

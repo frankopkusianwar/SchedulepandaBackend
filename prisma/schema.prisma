@@ -17,6 +17,7 @@ model User {
   id                 String             @id @default(uuid()) @db.Uuid
   clerkId            String             @unique
   platforms          Platform[]
+  posts              Post[]
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @updatedAt
 
@@ -33,14 +34,22 @@ model Platform {
 
 model Post {
   id                 String             @id @default(uuid()) @db.Uuid
-  description        String?
+  text               String?
+  status             PostStatus         @default(posted)
+  hashTags           String?
   date               DateTime?
   time               DateTime?
-  platform           String?
-  postingSchedule    String?
-  hashTags           String?
+  clerkId            String             
+  user               User               @relation(fields: [clerkId],references: [clerkId])
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @updatedAt
-  userId             String?
+ 
 
+}
+
+
+enum PostStatus {
+   posted
+   draft
+   scheduled
 }
