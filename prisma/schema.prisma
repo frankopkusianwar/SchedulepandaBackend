@@ -15,11 +15,43 @@ datasource db {
 
 model User {
   id                 String             @id @default(uuid()) @db.Uuid
-  userName           String?
-  email              String?
+  clerkId            String             @unique
+  platforms          Platform[]
+  posts              Post[]
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @updatedAt
-  password           String?
 
+}
+
+model Platform {
+   id                 String             @id @default(uuid()) @db.Uuid
+   name               String
+   iconUrl            String
+   users               User[]
+   posts               Post[]
+   createdAt          DateTime           @default(now())
+   updatedAt          DateTime           @updatedAt
+}
+
+model Post {
+  id                 String             @id @default(uuid()) @db.Uuid
+  text               String?
+  status             PostStatus         @default(published)
+  hashTags           String?
+  date               DateTime?
+  time               String?
+  clerkId            String             
+  user               User               @relation(fields: [clerkId],references: [clerkId])
+  platforms          Platform[]
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
  
+
+}
+
+
+enum PostStatus {
+   published
+   draft
+   scheduled
 }
