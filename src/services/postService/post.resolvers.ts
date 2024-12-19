@@ -8,7 +8,7 @@ export const postResolvers = {
           const postedPosts = await prisma.post.findMany({
             where:{
               clerkId:clerkID,
-              status:"posted"
+              status:"published"
             }
           })
 
@@ -63,9 +63,36 @@ export const postResolvers = {
           }
       },
     },
+
+    Post:{
+      platforms:async({id}:{id:string},_:any)=>{
+        try {
+
+          const platforms = await prisma.platform.findMany({
+            where:{
+              posts:{
+                some:{
+                  id:id
+                }
+              }
+            }
+          })
+
+          return platforms
+          
+        } catch (error:any) {
+          return new GraphQLError(error, {
+            extensions:{
+                code:"INTERNAL SERVER ERROR",
+                status:500
+            }
+         })
+        }
+      }
+    },
     Mutation: {
 
-      draftPost: async (_: any, args: {text: string, date: Date, time: Date, hashTags:string, clerkID:string }) => {
+      draftPost: async (_: any, args: {text: string, date: Date, time:string, hashTags:string, clerkID:string,platformIds:string[] }) => {
         try {
 
           const draft = await prisma.post.create({
@@ -75,7 +102,14 @@ export const postResolvers = {
               time: args.time,                      
               hashTags: args.hashTags,  
               status:"draft",           
-              clerkId:args.clerkID
+              clerkId:args.clerkID,
+              platforms:{
+                connect:args.platformIds.map((_id)=>{
+                  return {
+                    id:_id
+                  }
+                })
+              }
             },
           });
 
@@ -92,7 +126,7 @@ export const postResolvers = {
       },
 
 
-      postNow: async (_: any, args: { text: string, date: Date, time: Date,hashTags:string, clerkID:string }) => {
+      postNow: async (_: any, args: { text: string, date: Date, time:string,hashTags:string, clerkID:string,platformIds:string[] }) => {
         try {
 
           const post = await prisma.post.create({
@@ -102,7 +136,14 @@ export const postResolvers = {
               time: args.time,                      
               hashTags: args.hashTags,             
               clerkId:args.clerkID,
-              status:"posted"
+              status:"published",
+              platforms:{
+                connect:args.platformIds.map((_id)=>{
+                  return {
+                    id:_id
+                  }
+                })
+              }
             },
           });
 
@@ -124,7 +165,7 @@ export const postResolvers = {
         }
       },
 
-      schedulePost: async (_: any, args: { text: string, date: Date, time: Date,hashTags:string,clerkID:string}) => {
+      schedulePost: async (_: any, args: { text: string, date: Date, time:string,hashTags:string,clerkID:string,platformIds:string[]}) => {
         try {
 
           const post = await prisma.post.create({
@@ -134,20 +175,32 @@ export const postResolvers = {
               time: args.time,                      
               hashTags: args.hashTags,             
               clerkId:args.clerkID,
-              status:"scheduled"
+              status:"scheduled",
+              platforms:{
+                connect:args.platformIds.map((_id)=>{
+                  return {
+                    id:_id
+                  }
+                })
+              }
             },
           });
 
           return post
           
-        } catch (error) {
-          
+        } catch (error:any) {
+          return new GraphQLError(error, {
+            extensions:{
+                code:"INTERNAL SERVER ERROR",
+                status:500
+            }
+         })
         }
       },
 
 
 
-      updatePost: async (_: any, args: {id: string, description: string, date: Date, time: Date, platform: string, postingSchedule: string, hashTags:string, clerkID:string }) => {
+      updatePost: async (_: any, args: {id: string, description: string, date: Date, time:string, platform: string, postingSchedule: string, hashTags:string, clerkID:string }) => {
         return prisma.post.update({
           where: { id: args.id },
           data: {

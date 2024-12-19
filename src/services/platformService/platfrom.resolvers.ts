@@ -69,6 +69,12 @@ export const platformResolvers = {
       connectUserToAplatform:async(_:any,args:{platformId:string,clerkId:string})=>{
         try {
 
+
+            //implement deffrent ways of connecting to diffrent platforms
+
+            //linked in 
+            
+
             const updatedUser = await prisma.user.update({
                 where:{
                     clerkId:args.clerkId

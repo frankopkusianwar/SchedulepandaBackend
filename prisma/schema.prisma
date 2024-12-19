@@ -28,6 +28,7 @@ model Platform {
    name               String
    iconUrl            String
    users               User[]
+   posts               Post[]
    createdAt          DateTime           @default(now())
    updatedAt          DateTime           @updatedAt
 }
@@ -35,12 +36,13 @@ model Platform {
 model Post {
   id                 String             @id @default(uuid()) @db.Uuid
   text               String?
-  status             PostStatus         @default(posted)
+  status             PostStatus         @default(published)
   hashTags           String?
   date               DateTime?
-  time               DateTime?
+  time               String?
   clerkId            String             
   user               User               @relation(fields: [clerkId],references: [clerkId])
+  platforms          Platform[]
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @updatedAt
  
@@ -49,7 +51,7 @@ model Post {
 
 
 enum PostStatus {
-   posted
+   published
    draft
    scheduled
 }
