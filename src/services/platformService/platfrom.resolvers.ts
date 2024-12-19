@@ -9,12 +9,7 @@ export const platformResolvers = {
             const platforms = await prisma.platform.findMany()
             return platforms
            } catch (error:any) {
-             return new GraphQLError(error, {
-                extensions:{
-                    code:"INTERNAL SERVER ERROR",
-                    status:500
-                }
-             })
+             return new GraphQLError(error)
            }
       },
       getUserPlatforms:async(_:any,{clerkId}:{clerkId:string})=>{
@@ -33,12 +28,7 @@ export const platformResolvers = {
           return platforms
             
         } catch (error:any) {
-            return new GraphQLError(error, {
-                extensions:{
-                    code:"INTERNAL SERVER ERROR",
-                    status:500
-                }
-             })
+            return new GraphQLError(error)
         }
       }
     },
@@ -58,12 +48,7 @@ export const platformResolvers = {
               return platform
             
         } catch (error:any) {
-            return new GraphQLError(error, {
-                extensions:{
-                    code:"INTERNAL SERVER ERROR",
-                    status:500
-                }
-             })
+            return new GraphQLError(error)
         }
       },
       connectUserToAplatform:async(_:any,args:{platformId:string,clerkId:string})=>{
@@ -89,12 +74,7 @@ export const platformResolvers = {
             return updatedUser
             
         } catch (error:any) {
-            return new GraphQLError(error, {
-                extensions:{
-                    code:"INTERNAL SERVER ERROR",
-                    status:500
-                }
-             })
+            return new GraphQLError(error)
         }
       },
       disconnectUserFromPlatform:async(_:any,args:{platformId:string,clerkId:string})=>{
@@ -114,12 +94,7 @@ export const platformResolvers = {
             return updatedUser
             
         } catch (error:any) {
-            return new GraphQLError(error, {
-                extensions:{
-                    code:"INTERNAL SERVER ERROR",
-                    status:500
-                }
-             })
+            return new GraphQLError(error)
         }
       }
     }
