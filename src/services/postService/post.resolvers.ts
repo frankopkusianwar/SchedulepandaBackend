@@ -14,12 +14,7 @@ export const postResolvers = {
 
           return postedPosts
         } catch (error:any) {
-          return new GraphQLError(error, {
-            extensions:{
-                code:"INTERNAL SERVER ERROR",
-                status:500
-            }
-         })
+          return new GraphQLError(error)
         }
     },
 
@@ -34,12 +29,7 @@ export const postResolvers = {
 
         return scheduledPosts
       } catch (error:any) {
-        return new GraphQLError(error, {
-          extensions:{
-              code:"INTERNAL SERVER ERROR",
-              status:500
-          }
-       })
+        return new GraphQLError(error)
       }
   },
 
@@ -54,12 +44,7 @@ export const postResolvers = {
 
             return drafts
           } catch (error:any) {
-            return new GraphQLError(error, {
-              extensions:{
-                  code:"INTERNAL SERVER ERROR",
-                  status:500
-              }
-           })
+            return new GraphQLError(error)
           }
       },
     },
@@ -81,12 +66,7 @@ export const postResolvers = {
           return platforms
           
         } catch (error:any) {
-          return new GraphQLError(error, {
-            extensions:{
-                code:"INTERNAL SERVER ERROR",
-                status:500
-            }
-         })
+          return new GraphQLError(error)
         }
       }
     },
@@ -116,12 +96,7 @@ export const postResolvers = {
           return draft
           
         } catch (error:any) {
-          return new GraphQLError(error, {
-            extensions:{
-                code:"INTERNAL SERVER ERROR",
-                status:500
-            }
-         })
+          return new GraphQLError(error)
         }
       },
 
@@ -156,12 +131,7 @@ export const postResolvers = {
           return post
           
         } catch (error:any) {
-          return new GraphQLError(error, {
-            extensions:{
-                code:"INTERNAL SERVER ERROR",
-                status:500
-            }
-         })
+          return new GraphQLError(error)
         }
       },
 
@@ -189,12 +159,7 @@ export const postResolvers = {
           return post
           
         } catch (error:any) {
-          return new GraphQLError(error, {
-            extensions:{
-                code:"INTERNAL SERVER ERROR",
-                status:500
-            }
-         })
+          return new GraphQLError(error)
         }
       },
 
