@@ -18,9 +18,21 @@ model User {
   clerkId            String             @unique
   platforms          Platform[]
   posts              Post[]
+  connections        Connection[]
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @updatedAt
 
+}
+
+model Connection {
+  id                 String             @id @default(uuid()) @db.Uuid
+  token              String
+  expires            Int
+  platformId         String             @db.Uuid
+  clerkId            String
+  user               User               @relation(fields: [clerkId],references: [clerkId])
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
 }
 
 model Platform {

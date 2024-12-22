@@ -20,7 +20,7 @@ export const platformTypes = /* GraphQL */ `
         iconUrl:String!
     ):Platform!
 
-    connectUserToAplatform(platformId:ID!,clerkId:ID!):Platform!
+    connectUserToAplatform(platformId:ID!,clerkId:ID!,code:String!):Platform!
     disconnectUserFromPlatform(platformId:ID!,clerkId:ID!):Platform!
   }
 `;
