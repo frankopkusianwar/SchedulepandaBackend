@@ -103,6 +103,87 @@ export const postResolvers = {
 
       postNow: async (_: any, args: { text: string, date: Date, time:string,hashTags:string, clerkID:string,platformIds:string[] }) => {
         try {
+         
+
+         
+         //this implementation is unique to only linked in
+         //TODO structure code to support more platforms
+
+         const url = 'https://api.linkedin.com/v2/ugcPosts';
+
+         //get connection with this user clerkID and the first plartform id
+         //TODO improve
+
+         const conn = await prisma.connection.findFirst({
+          where:{
+            clerkId:args.clerkID,
+            platformId:args.platformIds[0]
+          }
+         })
+
+
+         if(!conn){
+           return new GraphQLError("You have no connections")
+         }
+
+         //TODO check if token has expired
+
+
+         // First, get the user's LinkedIn URN (unique identifier)
+          const profileResponse = await fetch('https://api.linkedin.com/v2/me', {
+            headers: {
+              'Authorization': `Bearer ${conn.token}`,
+              'Content-Type': 'application/json',
+            },
+          });
+
+          
+
+          if(!profileResponse){
+            return new GraphQLError("Failed to get user URN")
+          }
+
+          const profileData:any = await profileResponse.json();
+         
+
+          const authorURN = `urn:li:person:${profileData.id}`;
+
+
+            // Create the post
+            const postData = {
+              author: authorURN,
+              lifecycleState: 'PUBLISHED',
+              specificContent: {
+                'com.linkedin.ugc.ShareContent': {
+                  shareCommentary: {
+                    text: args.text
+                  },
+                  shareMediaCategory: 'NONE'
+                }
+              },
+              visibility: {
+                'com.linkedin.ugc.MemberNetworkVisibility': 'PUBLIC'
+              }
+            };
+
+
+            const response = await fetch(url, {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${conn.token}`,
+                'Content-Type': 'application/json',
+                'X-Restli-Protocol-Version': '2.0.0',
+              },
+              body: JSON.stringify(postData)
+            });
+
+
+
+            if (!response.ok) {
+              const errorData = await response.text();
+              return new GraphQLError(`Failed to make post ${errorData}`)
+            }
+
 
           const post = await prisma.post.create({
             data: {
